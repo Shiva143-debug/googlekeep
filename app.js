@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
       notes.sort((a, b) => a.id - b.id);
       TrashDiv.innerHTML = '';
       if (notes.length === 0) {
-        TrashDiv.innerHTML = '<p class="no-notes" style="text-align: center; padding-left:100px">No Trash notes yet!</p>';
+        TrashDiv.innerHTML = '<p class="no-notes" style="text-align: center; padding-left:500px">No Trash notes yet!</p>';
       }
       notes.forEach(note => {
         const noteElement = createNoteElement(note, "trash");
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
       notes.sort((a, b) => a.id - b.id);
       notesDiv.innerHTML = '';
       if (notes.length === 0) {
-        notesDiv.innerHTML = '<p class="no-notes" style="text-align: center; padding-left:100px ">No notes yet!</p>';
+        notesDiv.innerHTML = '<p class="no-notes" style="text-align: center; padding-left:500px ">No notes yet!</p>';
       }
       notes.forEach(note => {
         const noteElement = createNoteElement(note, "note");
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
       notes.sort((a, b) => a.id - b.id);
       archeiveDiv.innerHTML = '';
       if (notes.length === 0) {
-        archeiveDiv.innerHTML = '<p class="no-notes" style="text-align: center; padding-left:100px">No Archeive notes yet!</p>';
+        archeiveDiv.innerHTML = '<p class="no-notes" style="text-align: center; padding-left:500px">No Archeive notes yet!</p>';
       }
       notes.forEach(note => {
         const noteElement = createNoteElement(note, "archeive");
@@ -306,6 +306,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (response.ok) {
             noteElement.remove();
+            if (name === "note"){
+              fetchNotes();
+            }else if (name === "trash"){
+              getTrashItems();
+            }else if(name === "archeive"){
+              fetchArchieveItems();
+            }
           } else {
             alert('Failed to delete note. Please try again.');
           }
@@ -341,6 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
               noteElement.remove();
+              fetchNotes()
+
             } else {
               alert('Failed to delete note. Please try again.');
             }
