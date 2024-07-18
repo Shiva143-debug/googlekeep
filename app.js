@@ -420,6 +420,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    // Create image upload icon
+    const imageIcon = document.createElement('svg');
+    imageIcon.classList.add('bi', 'bi-image');
+    imageIcon.setAttribute('for', `imageInput_${note.id}`);
+    imageIcon.setAttribute('width', '1em');
+    imageIcon.setAttribute('height', '1em');
+    imageIcon.setAttribute('fill', 'currentColor');
+    imageIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    imageIcon.setAttribute('viewBox', '0 0 16 16');
+    imageIcon.innerHTML = `
+        <path fill-rule="evenodd" d="M3.5 1.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5V3h-11V1.5zm7.5 2.5a2 2 0 0 1 2 2v5.793l-2-2V5.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v3.293l-2 2V6a2 2 0 0 1 2-2h3zm1 .5H11a1 1 0 0 0 1-1V5a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v1a1 1 0 0 0 1 1h1a.5.5 0 0 1 .5.5v3.793l.646-.647a.5.5 0 0 1 .708 0l1.646 1.647V6a1 1 0 0 0-1-1z"/>
+        <path d="M1.707 4.293a1 1 0 0 1 0-1.414l2-2a1 1 0 0 1 1.414 0l1.793 1.793 5.793 5.793a1 1 0 0 1 0 1.414l-2 2a1 1 0 0 1-1.414 0L7 9.414l-5.293-5.293a1 1 0 0 1 0-1.414z"/>
+    `;
+    imageIcon.style.cursor = 'pointer';
+
+    // Create file input for image upload
+    const fileInput = document.createElement('input');
+    fileInput.setAttribute('id', `imageInput_${note.id}`);
+    fileInput.setAttribute('type', 'file');
+    fileInput.setAttribute('accept', 'image/*');
+    fileInput.style.display = 'none'; // Hide input by default
+    fileInput.addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+                formData.append('noteId', note.id);
+
+                const response = await fetch('https://leeward-walnut-wavelength.glitch.me/uploadimage', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Assuming your server returns the URL of the uploaded image
+                    const imageUrl = data.imageUrl;
+                    // Set image URL to the note element background or content
+                    noteElement.style.backgroundImage = `url('${imageUrl}')`;
+                } else {
+                    alert('Failed to upload image. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                alert('Failed to upload image. Please try again later.');
+            }
+        }
+    });
 
     // Container for icons
     const iconsContainer = document.createElement('div');
@@ -471,113 +520,5 @@ document.addEventListener('DOMContentLoaded', () => {
     return noteElement;
   }
 
-
-
-  // function editNoteElement(noteElement) {
-  //     const noteId = noteElement.dataset.id;
-  //     const noteContent = noteElement.textContent.trim();
-  //     const newContent = window.prompt('Edit your note:', noteContent);
-  //     if (newContent !== null && newContent.trim() !== '') {
-  //         updateNoteContent(noteId, newContent);
-  //     } else if (newContent !== null) {
-  //         alert('Note content cannot be empty.');
-  //     }
-  // }
-
-  // function editNoteElement(noteElement) {
-  //   // Remove selection from all notes
-  //   document.querySelectorAll('.note').forEach(note => {
-  //       note.style.border = '1px solid #ccc';
-  //       note.contentEditable = 'false'; // Disable content editing for unselected notes
-  //   });
-
-  //   // Select the clicked note
-  //   noteElement.style.border = '5px solid black';
-  //   noteElement.contentEditable = 'true'; // Enable content editing for selected note
-
-  //   // Save changes when pressing enter or clicking outside the note
-  //   noteElement.addEventListener('keydown', function (event) {
-  //       if (event.key === 'Enter') {
-  //           event.preventDefault();
-  //           updateNoteContent(noteElement);
-  //       }
-  //   });
-
-  // }
-  // async function updateNoteContent(id, content) {
-  //     try {
-  //         const response = await fetch(`https://leeward-walnut-wavelength.glitch.me/notes/${id}`, {
-  //             method: 'PUT',
-  //             headers: {
-  //                 'Content-Type': 'application/json'
-  //             },
-  //             body: JSON.stringify({ content })
-  //         });
-
-  //         if (response.ok) {
-  //             await fetchNotes(); // Fetch all notes including the updated one
-  //         } else {
-  //             alert('Failed to update note. Please try again.');
-  //         }
-  //     } catch (error) {
-  //         console.error('Error updating note:', error);
-  //         alert('Failed to update note. Please try again later.');
-  //     }
-  // }
-
-  // function editNoteElement(noteElement) {
-  //   // Change border to indicate editing mode
-  //   noteElement.style.border = '5px solid black';
-
-  //   // Convert to editable textarea
-  //   const content = noteElement.textContent.trim();
-  //   noteElement.innerHTML = '';
-  //   const textarea = document.createElement('textarea');
-  //   textarea.style.width = '100%';
-  //   textarea.style.height = '100%';
-  //   textarea.style.border = 'none';
-  //   textarea.style.outline = 'none';
-  //   textarea.style.resize = 'none';
-  //   textarea.style.fontFamily = 'inherit';
-  //   textarea.style.fontSize = 'inherit';
-  //   textarea.value = content;
-  //   noteElement.appendChild(textarea);
-
-  //   // Handle Enter key press to save changes
-  //   textarea.addEventListener('keydown', async function (event) {
-  //     if (event.key === 'Enter') {
-  //       event.preventDefault(); // Prevent default Enter behavior (line break)
-  //       const updatedContent = textarea.value.trim();
-  //       const id = parseInt(noteElement.dataset.id);
-  //       if (updatedContent !== '') {
-  //         try {
-  //           const response = await fetch(`https://leeward-walnut-wavelength.glitch.me/notes/${id}`, {
-  //             method: 'PUT',
-  //             headers: {
-  //               'Content-Type': 'application/json',
-  //             },
-  //             body: JSON.stringify({ content: updatedContent })
-  //           });
-
-  //           if (response.ok) {
-  //             // Update the note visually
-  //             noteElement.textContent = updatedContent;
-  //             noteElement.style.border = '1px solid #ccc'; // Restore original border
-  //           } else {
-  //             alert('Failed to update note. Please try again.');
-  //           }
-  //         } catch (error) {
-  //           console.error('Error updating note:', error);
-  //           alert('Failed to update note. Please try again later.');
-  //         }
-  //       } else {
-  //         alert('Note content cannot be empty.');
-  //       }
-  //     }
-  //   });
-
-  //   // Focus on textarea for immediate editing
-  //   textarea.focus();
-  // }
 
 });

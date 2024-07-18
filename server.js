@@ -459,26 +459,6 @@ app.delete('/archievenotes/:id', async (req, res) => {
   }
 });
 
-// app.delete('/notes/:id', async (req, res) => {
-//   const id = parseInt(req.params.id);
-
-//   try {
-//       const client = await pool.connect();
-//       const result = await client.query('DELETE FROM note WHERE id = $1 RETURNING *', [id]);
-//       client.release();
-
-//       if (result.rowCount > 0) {
-//           console.log(Note with ID ${id} deleted successfully.);
-//           res.status(200).json({ message: Note with ID ${id} deleted successfully. });
-//       } else {
-//           console.log(Note with ID ${id} not found.);
-//           res.status(404).json({ error: Note with ID ${id} not found. });
-//       }
-//   } catch (err) {
-//       console.error('Error deleting note:', err);
-//       res.status(500).json({ error: 'Internal server error' });
-//   }
-// });
 
 
 app.listen(PORT, () => {
