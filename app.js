@@ -435,12 +435,18 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     imageIcon.style.cursor = 'pointer';
 
-    // Create file input for image upload
+   
     const fileInput = document.createElement('input');
     fileInput.setAttribute('id', `imageInput_${note.id}`);
     fileInput.setAttribute('type', 'file');
     fileInput.setAttribute('accept', 'image/*');
     fileInput.style.display = 'none'; // Hide input by default
+    
+    // Add event listener to image icon to trigger file input click
+    imageIcon.addEventListener('click', () => {
+        fileInput.click(); // Programmatically trigger the file input
+    });
+    
     fileInput.addEventListener('change', async (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -448,12 +454,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData();
                 formData.append('image', file);
                 formData.append('noteId', note.id);
-
+    
                 const response = await fetch('https://leeward-walnut-wavelength.glitch.me/uploadimage', {
                     method: 'POST',
                     body: formData,
                 });
-
+    
                 if (response.ok) {
                     const data = await response.json();
                     // Assuming your server returns the URL of the uploaded image
@@ -469,7 +475,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
+    
+    
     // Container for icons
     const iconsContainer = document.createElement('div');
     iconsContainer.style.display = 'flex';
@@ -481,6 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
    
     iconsContainer.appendChild(colorPaletteIcon);
+    iconsContainer.appendChild(imageIcon)
 
     // Append content area and icons container to note element
     noteElement.appendChild(contentArea);
