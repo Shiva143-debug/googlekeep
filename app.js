@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
 
-    const response = await fetch('http://localhost:3000/register', {
+    const response = await fetch('https://leeward-walnut-wavelength.glitch.me/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, email, password })
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
-    const response = await fetch('http://localhost:3000/login', {
+    const response = await fetch('https://leeward-walnut-wavelength.glitch.me/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const noteContent = window.prompt('Enter your note content:');
     if (noteContent !== null && noteContent.trim() !== '') {
       try {
-        const response = await fetch('http://localhost:3000/addnotes', {
+        const response = await fetch('https://leeward-walnut-wavelength.glitch.me/addnotes', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function getTrashItems() {
     try {
-      const response = await fetch('http://localhost:3000/trash', {
+      const response = await fetch('https://leeward-walnut-wavelength.glitch.me/trash', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchNotes() {
     try {
-      const response = await fetch('http://localhost:3000/notes', {
+      const response = await fetch('https://leeward-walnut-wavelength.glitch.me/notes', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchArchieveItems() {
     try {
-      const response = await fetch('http://localhost:3000/archeive', {
+      const response = await fetch('https://leeward-walnut-wavelength.glitch.me/archeive', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (confirmed) {
         try {
           const id = parseInt(noteElement.dataset.id);
-          const response = await fetch(`http://localhost:3000/deletenotesin${name}/${id}`, {
+          const response = await fetch(`https://leeward-walnut-wavelength.glitch.me/deletenotesin${name}/${id}`, {
             method: 'DELETE',
           });
 
@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirmed) {
           try {
             const id = parseInt(noteElement.dataset.id);
-            const response = await fetch(`http://localhost:3000/archievenotes/${id}`, {
+            const response = await fetch(`https://leeward-walnut-wavelength.glitch.me/archievenotes/${id}`, {
               method: 'DELETE',
             });
 
@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const selectedColor = colorPicker.value; // Get the selected color
       const id = parseInt(noteElement.dataset.id);
-      const response = await fetch(`http://localhost:3000/${name}background/${id}`, {
+      const response = await fetch(`https://leeward-walnut-wavelength.glitch.me/${name}background/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const updatedContent = contentArea.textContent;
         const id = parseInt(noteElement.dataset.id);
-        const response = await fetch(`http://localhost:3000/update${name}/${id}`, {
+        const response = await fetch(`https://leeward-walnut-wavelength.glitch.me/update${name}/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -497,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // }
   // async function updateNoteContent(id, content) {
   //     try {
-  //         const response = await fetch(`http://localhost:3000/notes/${id}`, {
+  //         const response = await fetch(`https://leeward-walnut-wavelength.glitch.me/notes/${id}`, {
   //             method: 'PUT',
   //             headers: {
   //                 'Content-Type': 'application/json'
@@ -542,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //       const id = parseInt(noteElement.dataset.id);
   //       if (updatedContent !== '') {
   //         try {
-  //           const response = await fetch(`http://localhost:3000/notes/${id}`, {
+  //           const response = await fetch(`https://leeward-walnut-wavelength.glitch.me/notes/${id}`, {
   //             method: 'PUT',
   //             headers: {
   //               'Content-Type': 'application/json',
