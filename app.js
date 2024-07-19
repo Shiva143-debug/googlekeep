@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
     archeive.style.color='white'
     TrashNote.style.display="flex"
     Trash.style.backgroundColor="blue"
-    
+    note.style.backgroundColor="#6200ea"
+    archeive.style.backgroundColor="#6200ea"
     await getTrashItems();
   }
 
@@ -65,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
     archeive.style.color='white'
     TrashNote.style.display="none"
     note.style.backgroundColor="blue"
+     Trash.style.backgroundColor="#6200ea"
+    archeive.style.backgroundColor="#6200ea"
     await fetchNotes();
   }
 
@@ -80,6 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
     Trash.style.color='white'
     TrashNote.style.display="none"
     archeive.style.backgroundColor="blue"
+     note.style.backgroundColor="#6200ea"
+    Trash.style.backgroundColor="#6200ea"
     await fetchArchieveItems();
   }
 
