@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const Trash = document.getElementById('view-trash');
   const note = document.getElementById('view-note');
   const archeive = document.getElementById('view-archived');
+  const TrashNote = document.getElementById('trash-note');
 
   Trash.addEventListener('click', onTrashClick);
   note.addEventListener('click', onNoteClick);
@@ -46,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
     note.style.color='white'
     archeive.style.border = 'none'
     archeive.style.color='white'
+    TrashNote.style.display="flex"
+    
     await getTrashItems();
   }
 
@@ -59,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Trash.style.color='white'
     archeive.style.border = 'none'
     archeive.style.color='white'
+    TrashNote.style.display="none"
     await fetchNotes();
   }
 
@@ -72,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     note.style.color='white'
     Trash.style.border = 'none'
     Trash.style.color='white'
+    TrashNote.style.display="none"
     await fetchArchieveItems();
   }
 
@@ -189,7 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (notes.length === 0) {
         TrashDiv.innerHTML = '<p class="no-notes" style="text-align: center; padding-left:500px">No Trash notes yet!</p>';
       }
+      // TrashDiv.innerHTML = 'Notes in Trash will automatically delete after 30 days';
+      // TrashDiv.append(TrashDiv.innerHTML)
+
       notes.forEach(note => {
+
         const noteElement = createNoteElement(note, "trash");
         TrashDiv.appendChild(noteElement);
       });
@@ -219,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
         notesDiv.innerHTML = '<p class="no-notes" style="text-align: center; padding-left:500px ">No notes yet!</p>';
       }
       notes.forEach(note => {
+        
         const noteElement = createNoteElement(note, "note");
         notesDiv.appendChild(noteElement);
       });
@@ -262,7 +272,18 @@ document.addEventListener('DOMContentLoaded', () => {
     noteElement.classList.add('note');
     noteElement.dataset.id = note.id;
     noteElement.style.backgroundColor = note.background
-
+    if (note.imageurl) {
+      const img = document.createElement('img');
+      img.src = note.imageurl;
+      img.alt = 'Note Image';
+      
+      // Set styles for the image (e.g., max width to ensure it fits within the note)
+      img.style.maxWidth = '100%'; // Adjust as needed
+      img.style.height = 'auto';   // Maintain aspect ratio
+  
+      // Append the image below the content area
+      noteElement.appendChild(img);
+    }
     // Create editable content area
     const contentArea = document.createElement('div');
     contentArea.contentEditable = true;
@@ -446,36 +467,53 @@ document.addEventListener('DOMContentLoaded', () => {
     imageIcon.addEventListener('click', () => {
         fileInput.click(); // Programmatically trigger the file input
     });
-    
     fileInput.addEventListener('change', async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            try {
-                const formData = new FormData();
-                formData.append('image', file);
-                formData.append('noteId', note.id);
-    
-                const response = await fetch('https://leeward-walnut-wavelength.glitch.me/uploadimage', {
-                    method: 'POST',
-                    body: formData,
-                });
-    
-                if (response.ok) {
-                    const data = await response.json();
-                    // Assuming your server returns the URL of the uploaded image
-                    const imageUrl = data.imageUrl;
-                    // Set image URL to the note element background or content
-                    noteElement.style.backgroundImage = `url('${imageUrl}')`;
-                } else {
-                    alert('Failed to upload image. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error uploading image:', error);
-                alert('Failed to upload image. Please try again later.');
-            }
-        }
-    });
-    
+      const file = event.target.files[0];
+      if (file) {
+          try {
+              const formData = new FormData();
+              formData.append('image', file);
+              formData.append('noteId', note.id);
+  
+              const response = await fetch('https://leeward-walnut-wavelength.glitch.me/uploadimage', {
+                  method: 'PUT',
+                  body: formData,
+              });
+  
+              if (response.ok) {
+                  const data = await response.json();
+  
+                  // Ensure imageUrl is defined and starts with 'data:image/'
+                  const imageUrl = data.imageUrl;
+                  if (imageUrl && imageUrl.startsWith('data:image/')) {
+                      // Create an <img> element and set its src to the Base64 URL
+                      const img = document.createElement('img');
+                      img.src = imageUrl;
+                      img.alt = 'Uploaded Image';
+  
+                      // Optionally set styles for the image
+                      img.style.maxWidth = '100%'; // Example style
+                      img.style.height = 'auto';   // Example style
+  
+                      // Clear any existing images or content (if needed)
+                      const existingIconsContainer = noteElement.querySelector('.icons-container');
+                     
+                      noteElement.appendChild(img);
+
+                     
+                  } else {
+                      alert('Invalid image URL received.');
+                  }
+              } else {
+                  alert('Failed to upload image. Please try again.');
+              }
+          } catch (error) {
+              console.error('Error uploading image:', error);
+              alert('Failed to upload image. Please try again later.');
+          }
+      }
+  });
+  
     
     // Container for icons
     const iconsContainer = document.createElement('div');
@@ -488,8 +526,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
    
     iconsContainer.appendChild(colorPaletteIcon);
+    if (name === "note"){
     iconsContainer.appendChild(imageIcon)
-
+    }
     // Append content area and icons container to note element
     noteElement.appendChild(contentArea);
     noteElement.appendChild(iconsContainer);
