@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const archeive = document.getElementById('view-archived');
   const TrashNote = document.getElementById('trash-note');
 
+
   Trash.addEventListener('click', onTrashClick);
   note.addEventListener('click', onNoteClick);
   archeive.addEventListener('click', onArchieveClick);
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     note.style.border = '1px solid black'
     note.style.color='black'
+    TrashNote.style.display="none"
 
   async function onTrashClick() {
     notesDiv.style.display = 'none';
@@ -100,6 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function onRegisterFormSubmit(e) {
     e.preventDefault();
+    const registerButton = document.getElementById('register-button');
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner');
+
+    registerButton.textContent = '';
+    registerButton.appendChild(spinner);
     const username = document.getElementById('register-username').value;
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
@@ -117,10 +125,21 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       alert('Registration failed. Please try again.');
     }
+    document.getElementById('register-username').value = ""
+    document.getElementById('register-email').value=""
+    document.getElementById('register-password').value=""
+    spinner.classList.remove('spinner');
+    registerButton.textContent = 'Register';
   }
 
   async function onLoginFormSubmit(e) {
     e.preventDefault();
+    const loginButton = document.getElementById('login-button');
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner');
+
+    loginButton.textContent = '';
+    loginButton.appendChild(spinner);
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
@@ -138,6 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       alert('Login failed. Please try again.');
     }
+    document.getElementById('login-email').value=""
+    document.getElementById('login-password').value=""
+    spinner.classList.remove('spinner');
+    loginButton.textContent = 'Login';
   }
 
   async function onCreateNoteButtonClick() {
