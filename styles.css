@@ -72,7 +72,7 @@ button:hover {
 #main-container{
     width: 90%;
     margin-left:10px;
-    /* border-left: 1px solid gray; */
+    
     height: 100vh;
 }
 #nav{
